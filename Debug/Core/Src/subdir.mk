@@ -7,6 +7,7 @@
 C_SRCS += \
 ../Core/Src/GAS_Can.c \
 ../Core/Src/GAS_Scheduler.c \
+../Core/Src/InverterControl.c \
 ../Core/Src/adc.c \
 ../Core/Src/can.c \
 ../Core/Src/gpio.c \
@@ -20,6 +21,7 @@ C_SRCS += \
 OBJS += \
 ./Core/Src/GAS_Can.o \
 ./Core/Src/GAS_Scheduler.o \
+./Core/Src/InverterControl.o \
 ./Core/Src/adc.o \
 ./Core/Src/can.o \
 ./Core/Src/gpio.o \
@@ -33,6 +35,7 @@ OBJS += \
 C_DEPS += \
 ./Core/Src/GAS_Can.d \
 ./Core/Src/GAS_Scheduler.d \
+./Core/Src/InverterControl.d \
 ./Core/Src/adc.d \
 ./Core/Src/can.d \
 ./Core/Src/gpio.d \

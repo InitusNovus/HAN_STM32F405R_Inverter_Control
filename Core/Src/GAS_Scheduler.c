@@ -11,6 +11,8 @@
 //#include "tim.h"
 #include "GAS_Can.h"
 
+#include "inverterControl.h"
+
 extern uint8_t canRx0Data[8];
 extern volatile uint16_t ValueOfADC[5];
 uint8_t pin_state;
@@ -37,6 +39,8 @@ void GAS_Scheduler_init(void)
 //	  {
 //		  Error_Handler();
 //	  }
+
+	InverterControl_init();
 //********ADC initialization********=
 
 //********CAN initialization********
@@ -64,7 +68,11 @@ void GAS_Scheduler_taskCounter_100ms(void)
 }
 void GAS_Scheduler_taskCounter_1000ms(void)
 {
+//			HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_11);
 
+#ifdef INVCON_TEST
+	InverterControl_test_1000ms();
+#endif
 }
 
 
@@ -116,9 +124,6 @@ void GAS_Scheduler(void)
 	{
 		gTask.flag_1000ms = False;
 		GAS_Scheduler_taskCounter_1000ms();
-//		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_6|GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10
-//				|GPIO_PIN_11, GPIO_PIN_SET);
-		HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_11);
 	}
 
 //	GAS_Can_recieveMessage(&hcan);

@@ -1,5 +1,6 @@
 "./Core/Src/GAS_Can.o"
 "./Core/Src/GAS_Scheduler.o"
+"./Core/Src/InverterControl.o"
 "./Core/Src/adc.o"
 "./Core/Src/can.o"
 "./Core/Src/gpio.o"
