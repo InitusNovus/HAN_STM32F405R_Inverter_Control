@@ -8,6 +8,7 @@
 #ifndef INC_INVERTERCONTROL_H_
 #define INC_INVERTERCONTROL_H_
 
+#include <stdbool.h>
 #include "gpio.h"
 
 
