@@ -16,6 +16,27 @@
 #define INVCON_INV1_BA3_GPIOX GPIOA
 #define INVCON_INV1_BA3_GPIOP GPIO_PIN_15
 
+#define INVCON_INV2_BE1_GPIOX GPIOA
+#define INVCON_INV2_BE1_GPIOP GPIO_PIN_10
+#define INVCON_INV2_BE2_GPIOX GPIOA
+#define INVCON_INV2_BE2_GPIOP GPIO_PIN_9
+#define INVCON_INV2_BA3_GPIOX GPIOA
+#define INVCON_INV2_BA3_GPIOP GPIO_PIN_8
+
+#define INVCON_INV3_BE1_GPIOX GPIOC
+#define INVCON_INV3_BE1_GPIOP GPIO_PIN_9
+#define INVCON_INV3_BE2_GPIOX GPIOC
+#define INVCON_INV3_BE2_GPIOP GPIO_PIN_8
+#define INVCON_INV3_BA3_GPIOX GPIOC
+#define INVCON_INV3_BA3_GPIOP GPIO_PIN_7
+
+#define INVCON_INV4_BE1_GPIOX GPIOC
+#define INVCON_INV4_BE1_GPIOP GPIO_PIN_6
+#define INVCON_INV4_BE2_GPIOX GPIOB
+#define INVCON_INV4_BE2_GPIOP GPIO_PIN_15
+#define INVCON_INV4_BA3_GPIOX GPIOB
+#define INVCON_INV4_BA3_GPIOP GPIO_PIN_14
+
 typedef struct
 {
 	GPIO_TypeDef* GPIOx;
@@ -54,6 +75,27 @@ void InverterControl_init(void)
 	InverterControl.Inv1.be2.GPIO_Pin = INVCON_INV1_BE2_GPIOP;
 	InverterControl.Inv1.ba3.GPIOx = 	INVCON_INV1_BA3_GPIOX;
 	InverterControl.Inv1.ba3.GPIO_Pin = INVCON_INV1_BA3_GPIOP;
+
+	InverterControl.Inv2.be1.GPIOx = 	INVCON_INV2_BE1_GPIOX;
+	InverterControl.Inv2.be1.GPIO_Pin = INVCON_INV2_BE1_GPIOP;
+	InverterControl.Inv2.be2.GPIOx = 	INVCON_INV2_BE2_GPIOX;
+	InverterControl.Inv2.be2.GPIO_Pin = INVCON_INV2_BE2_GPIOP;
+	InverterControl.Inv2.ba3.GPIOx = 	INVCON_INV2_BA3_GPIOX;
+	InverterControl.Inv2.ba3.GPIO_Pin = INVCON_INV2_BA3_GPIOP;
+
+	InverterControl.Inv3.be1.GPIOx = 	INVCON_INV3_BE1_GPIOX;
+	InverterControl.Inv3.be1.GPIO_Pin = INVCON_INV3_BE1_GPIOP;
+	InverterControl.Inv3.be2.GPIOx = 	INVCON_INV3_BE2_GPIOX;
+	InverterControl.Inv3.be2.GPIO_Pin = INVCON_INV3_BE2_GPIOP;
+	InverterControl.Inv3.ba3.GPIOx = 	INVCON_INV3_BA3_GPIOX;
+	InverterControl.Inv3.ba3.GPIO_Pin = INVCON_INV3_BA3_GPIOP;
+
+	InverterControl.Inv4.be1.GPIOx = 	INVCON_INV4_BE1_GPIOX;
+	InverterControl.Inv4.be1.GPIO_Pin = INVCON_INV4_BE1_GPIOP;
+	InverterControl.Inv4.be2.GPIOx = 	INVCON_INV4_BE2_GPIOX;
+	InverterControl.Inv4.be2.GPIO_Pin = INVCON_INV4_BE2_GPIOP;
+	InverterControl.Inv4.ba3.GPIOx = 	INVCON_INV4_BA3_GPIOX;
+	InverterControl.Inv4.ba3.GPIO_Pin = INVCON_INV4_BA3_GPIOP;
 }
 
 #ifdef INVCON_TEST
@@ -63,26 +105,37 @@ void InverterControl_test_1000ms(void)
 	if(test == 0)
 	{
 		InverterControl_On_be1(&InverterControl.Inv1);
-//		InverterControl_Off_be2(&InverterControl.Inv1);
+		InverterControl_Off_be2(&InverterControl.Inv1);
+		InverterControl_On_be1(&InverterControl.Inv2);
+		InverterControl_Off_be2(&InverterControl.Inv2);
+		InverterControl_On_be1(&InverterControl.Inv3);
+		InverterControl_Off_be2(&InverterControl.Inv3);
+		InverterControl_On_be1(&InverterControl.Inv4);
+		InverterControl_Off_be2(&InverterControl.Inv4);
 		test = 1;
 	}
 	else
 	{
 		InverterControl_Off_be1(&InverterControl.Inv1);
-//		InverterControl_On_be2(&InverterControl.Inv1);
+		InverterControl_On_be2(&InverterControl.Inv1);
+		InverterControl_Off_be1(&InverterControl.Inv2);
+		InverterControl_On_be2(&InverterControl.Inv2);
+		InverterControl_Off_be1(&InverterControl.Inv3);
+		InverterControl_On_be2(&InverterControl.Inv3);
+		InverterControl_Off_be1(&InverterControl.Inv4);
+		InverterControl_On_be2(&InverterControl.Inv4);
 		test = 0;
 	}
 
-	uint32_t a;
 
-	if(InverterControl_Read_ba3(&InverterControl.Inv1))
-	{
-		InverterControl_On_be2(&InverterControl.Inv1);
-	}
-	else
-	{
-		InverterControl_Off_be2(&InverterControl.Inv1);
-	}
+//	if(InverterControl_Read_ba3(&InverterControl.Inv1))
+//	{
+//		InverterControl_On_be2(&InverterControl.Inv1);
+//	}
+//	else
+//	{
+//		InverterControl_Off_be2(&InverterControl.Inv1);
+//	}
 }
 #endif
 
