@@ -25,10 +25,11 @@ volatile int gTimerCnt;
 Scheduler_task gTask;
 
 void GAS_Scheduler_init(void);
-void GAS_Scheduler_taskCounter_1ms(void);
-void GAS_Scheduler_taskCounter_10ms(void);
-void GAS_Scheduler_taskCounter_100ms(void);
-void GAS_Scheduler_taskCounter_1000ms(void);
+static void GAS_Scheduler_taskCounter_1ms(void);
+static void GAS_Scheduler_taskCounter_10ms(void);
+static void GAS_Scheduler_taskCounter_100ms(void);
+static void GAS_Scheduler_taskCounter_1000ms(void);
+static void GAS_Scheduler_taskBackground(void);
 //void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
 void HAL_SYSTICK_Callback(void);
 void GAS_Schduler(void);
@@ -52,21 +53,21 @@ void GAS_Scheduler_init(void)
 
 
 
-void GAS_Scheduler_taskCounter_1ms(void)
+static inline __attribute__((always_inline)) void GAS_Scheduler_taskCounter_1ms(void)
 {
 //	GAS_Can_sendMessage();
 }
 
-void GAS_Scheduler_taskCounter_10ms(void)
+static inline __attribute__((always_inline)) void GAS_Scheduler_taskCounter_10ms(void)
 {
 
 }
 
-void GAS_Scheduler_taskCounter_100ms(void)
+static inline __attribute__((always_inline)) void GAS_Scheduler_taskCounter_100ms(void)
 {
 
 }
-void GAS_Scheduler_taskCounter_1000ms(void)
+static inline __attribute__((always_inline)) void GAS_Scheduler_taskCounter_1000ms(void)
 {
 //			HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_11);
 
@@ -74,7 +75,10 @@ void GAS_Scheduler_taskCounter_1000ms(void)
 	InverterControl_test_1000ms();
 #endif
 }
-
+static inline __attribute__((always_inline)) void GAS_Scheduler_taskBackground(void)
+{
+	InverterControl_Run_service();
+}
 
 //void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 void HAL_SYSTICK_Callback(void)
@@ -125,6 +129,8 @@ void GAS_Scheduler(void)
 		gTask.flag_1000ms = False;
 		GAS_Scheduler_taskCounter_1000ms();
 	}
+
+	GAS_Scheduler_taskBackground();
 
 //	GAS_Can_recieveMessage(&hcan);
 //	HAL_CAN_IRQHandler(&hcan);

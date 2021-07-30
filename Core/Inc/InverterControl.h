@@ -12,10 +12,11 @@
 #include "gpio.h"
 
 
-#define INVCON_TEST
+//#define INVCON_TEST
 
 
 extern void InverterControl_Startup(void);
+extern void InverterControl_Run_service(void);
 
 #ifdef INVCON_TEST
 extern void InverterControl_test_1000ms(void);
