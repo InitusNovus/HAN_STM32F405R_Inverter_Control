@@ -75,6 +75,9 @@ typedef struct
 	InverterControl_Inverter_t Inv4;
 }InverterControl_t;
 
+
+/***Global Variable Declarations***/
+
 InverterControl_t InverterControl;
 
 
