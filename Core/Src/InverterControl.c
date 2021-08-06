@@ -161,7 +161,7 @@ void InverterControl_Run_1ms(void)
 			{
 				if(dlc > 8)
 					dlc = 8;
-				while(dlc--)
+				while(--dlc)
 					InverterControl_msg_rx_1.msg.U[dlc] = rxDataBuf[dlc];
 			}
 		}
