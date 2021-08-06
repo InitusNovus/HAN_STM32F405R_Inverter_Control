@@ -12,39 +12,35 @@
 #include "can.h"
 //#include "GAS_Vadc.h"
 
-typedef union{
-	uint8_t TxData[8];
-	struct{
-		unsigned int sensor0 : 12;
-		unsigned int sensor1 : 12;
-		unsigned int sensor2 : 12;
-		unsigned int sensor3 : 12;
-		unsigned int sensor4 : 12;
-		unsigned int reserved: 4;
 
-	}__attribute__((aligned(1),packed)) B;
+typedef enum
+{
+	std = 0,
+	ext,
+}GAS_Can_idType;
 
-}stm32_msg1_t;
+typedef struct
+{
+    CAN_HandleTypeDef *can;
+    uint32_t id;
+    GAS_Can_idType idType;
+    uint32_t ide;
+    uint32_t rtr;
+    uint32_t dlc;
+    uint8_t data[8];
+}GAS_Can_message_tx_t;
 
-typedef union{
-	uint8_t RxData[8];
-	struct{
-		unsigned int sensor0 : 12;
-		unsigned int sensor1 : 12;
-		unsigned int sensor2 : 12;
-		unsigned int sensor3 : 12;
-		unsigned int sensor4 : 12;
-		unsigned int reserved: 4;
-
-	}__attribute__((aligned(1),packed)) B;
-
-}stm32_msg2_t;
-
-extern stm32_msg1_t stm32_1;
-extern stm32_msg2_t stm32_2;
 
 extern void GAS_Can_init(void);
-extern void GAS_Can_sendMessage(void);
+//extern void GAS_Can_sendMessage(void);
+extern void GAS_Can_sendMessage(GAS_Can_message_tx_t *msg);
 extern void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan);
 extern void GAS_Can_recieveMessage(CAN_HandleTypeDef *hcan);
+
+
+
+//static inline __attribute__((always_inline)) GAS_Can_
+
+
+
 #endif /* SRC_GETANDSEND_H_ */
