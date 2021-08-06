@@ -56,6 +56,7 @@ void GAS_Scheduler_init(void)
 static inline __attribute__((always_inline)) void GAS_Scheduler_taskCounter_1ms(void)
 {
 //	GAS_Can_sendMessage();
+	InverterControl_Run_1ms();
 }
 
 static inline __attribute__((always_inline)) void GAS_Scheduler_taskCounter_10ms(void)

@@ -5,6 +5,7 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../Core/Src/CanMessage.c \
 ../Core/Src/GAS_Can.c \
 ../Core/Src/GAS_Scheduler.c \
 ../Core/Src/InverterControl.c \
@@ -19,6 +20,7 @@ C_SRCS += \
 ../Core/Src/system_stm32f4xx.c 
 
 OBJS += \
+./Core/Src/CanMessage.o \
 ./Core/Src/GAS_Can.o \
 ./Core/Src/GAS_Scheduler.o \
 ./Core/Src/InverterControl.o \
@@ -33,6 +35,7 @@ OBJS += \
 ./Core/Src/system_stm32f4xx.o 
 
 C_DEPS += \
+./Core/Src/CanMessage.d \
 ./Core/Src/GAS_Can.d \
 ./Core/Src/GAS_Scheduler.d \
 ./Core/Src/InverterControl.d \

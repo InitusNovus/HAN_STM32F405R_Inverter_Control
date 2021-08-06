@@ -8,9 +8,10 @@
 /***Includes******************************************************************/
 #include "stm32f4xx_hal.h"
 #include "inverterControl.h"
+#include "CanMessage.h"
 #include <stdint.h>
 
-/***defines*******************************************************************/
+/***Defines*******************************************************************/
 #define INVCON_INV1_BE1_GPIOX GPIOC
 #define INVCON_INV1_BE1_GPIOP GPIO_PIN_11
 #define INVCON_INV1_BE2_GPIOX GPIOC
@@ -81,6 +82,7 @@ typedef struct
 InverterControl_t InverterControl;
 
 
+
 /***Private Function Prototypes***********************************************/
 
 static void InverterControl_Startup_inv(InverterControl_Inverter_t* inv);
@@ -145,6 +147,26 @@ void InverterControl_Run_service(void)
 	InverterControl_Update_io(&InverterControl.Inv4);
 }
 
+void InverterControl_Run_1ms(void)
+{
+	CAN_RxHeaderTypeDef canRxHeader;
+	uint8_t rxDataBuf[8];
+	while(HAL_CAN_GetRxFifoFillLevel(&hcan1, CAN_RX_FIFO0) != 0)
+	{
+		HAL_CAN_GetRxMessage(&hcan1, CAN_RX_FIFO0, &canRxHeader, rxDataBuf);
+		if(canRxHeader.FilterMatchIndex == InverterControl_msg_rx_1.fim)
+		{
+			uint8_t dlc = canRxHeader.DLC;
+			if(dlc > 0)
+			{
+				if(dlc > 8)
+					dlc = 8;
+				while(dlc--)
+					InverterControl_msg_rx_1.msg.U[dlc] = rxDataBuf[dlc];
+			}
+		}
+	}
+}
 
 #ifdef INVCON_TEST
 void InverterControl_test_1000ms(void)

@@ -1,3 +1,4 @@
+"./Core/Src/CanMessage.o"
 "./Core/Src/GAS_Can.o"
 "./Core/Src/GAS_Scheduler.o"
 "./Core/Src/InverterControl.o"
