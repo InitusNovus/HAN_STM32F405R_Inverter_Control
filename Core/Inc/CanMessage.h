@@ -3,6 +3,7 @@
  *
  *  Created on: Aug 7, 2021
  *      Author: InitusNovus
+ *      TODO: rx msg2
  */
 
 #ifndef INC_CANMESSAGE_H_
@@ -16,16 +17,22 @@
 /***Enumerations**************************************************************/
 typedef enum
 {
+	CanMsg_none = 0,
+	CanMsg_updated,
+	CanMsg_overridden,
+}CanMsg_update;
+typedef enum
+{
 	none = 0,
 	write = 1,
 }CanMsg_InverterControl_rx_1_control;
 
 typedef enum
 {
-	inv0 = 0,
-	inv1,
-	inv2,
-	inv3,
+	inv1 = 0,
+	inv2 = 1,
+	inv3 = 2,
+	inv4 = 3,
 }CanMsg_InverterControl_rx_1_invSel;
 
 /***Data Structures***********************************************************/
@@ -55,6 +62,7 @@ typedef struct
 	uint16_t								StdId;		//Std address
 	CAN_RxHeaderTypeDef 					canRxHeader;
 	CanMsg_InverterControl_rx_1_msg			msg;
+	CanMsg_update							updated;
 }CanMsg_InverterControl_rx_1;
 
 /***Global Variables**********************************************************/

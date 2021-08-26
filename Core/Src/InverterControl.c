@@ -86,6 +86,8 @@ InverterControl_t InverterControl;
 /***Private Function Prototypes***********************************************/
 
 static void InverterControl_Startup_inv(InverterControl_Inverter_t* inv);
+static void InverterControl_Update_con(InverterControl_Inverter_t* inv,
+		InverterControl_Inverter_io_control_t be1, InverterControl_Inverter_io_control_t be2);
 static void InverterControl_Update_io(InverterControl_Inverter_t* inv);
 static void InverterControl_On_be1(InverterControl_Inverter_t* inv);
 static void InverterControl_Off_be1(InverterControl_Inverter_t* inv);
@@ -149,8 +151,11 @@ void InverterControl_Run_service(void)
 
 void InverterControl_Run_1ms(void)
 {
+	/*CAN RX routine*/
 	CAN_RxHeaderTypeDef canRxHeader;
 	uint8_t rxDataBuf[8];
+
+	/*InverterControl message RX1*/
 	while(HAL_CAN_GetRxFifoFillLevel(&hcan1, CAN_RX_FIFO0) != 0)
 	{
 		HAL_CAN_GetRxMessage(&hcan1, CAN_RX_FIFO0, &canRxHeader, rxDataBuf);
@@ -164,8 +169,71 @@ void InverterControl_Run_1ms(void)
 				while(--dlc)
 					InverterControl_msg_rx_1.msg.U[dlc] = rxDataBuf[dlc];
 			}
+			if(InverterControl_msg_rx_1.updated == CanMsg_updated || InverterControl_msg_rx_1.updated == CanMsg_overridden)
+			{
+				InverterControl_msg_rx_1.updated = CanMsg_overridden;
+			}
+			else
+			{
+				InverterControl_msg_rx_1.updated = CanMsg_updated;
+			}
 		}
 	}
+	if(InverterControl_msg_rx_1.updated != CanMsg_none)
+	{
+		CanMsg_InverterControl_rx_1_msg msg = InverterControl_msg_rx_1.msg;
+		if(msg.B.control == true)
+		{
+			InverterControl_Inverter_t *inv;
+			InverterControl_Inverter_io_control_t be1;
+			InverterControl_Inverter_io_control_t be2;
+			if(msg.B.rstBe1 == true)
+				be1 = InverterControl_io_reset;
+			else if(msg.B.setBe1 == true)
+				be1 = InverterControl_io_set;
+			if(msg.B.rstBe2 == true)
+				be2 = InverterControl_io_reset;
+			else if(msg.B.setBe2 == true)
+				be2 = InverterControl_io_set;
+
+			switch((uint8_t)msg.B.invSel)
+			{
+			case inv1:
+				inv = &InverterControl.Inv1;
+				break;
+			case inv2:
+				inv = &InverterControl.Inv2;
+				break;
+			case inv3:
+				inv = &InverterControl.Inv3;
+				break;
+			case inv4:
+				inv = &InverterControl.Inv4;
+				break;
+			default: break;
+			}
+			InverterControl_Update_con(inv, be1, be2);
+
+			msg.B.rstBe1 = false;
+			msg.B.setBe1 = false;
+			msg.B.rstBe2 = false;
+			msg.B.setBe2 = false;
+
+			/*Reset the flag*/
+			msg.B.control = false;
+		}
+
+		if(InverterControl_msg_rx_1.updated == CanMsg_overridden)
+		{
+			//TODO: overridden message routine
+		}
+
+		/*Reset the flag*/
+		InverterControl_msg_rx_1.updated = CanMsg_none;
+		//TODO: tx msg: status ack
+	}
+	//TODO: rx msg2 routine
+	/*InverterControl message RX2*/
 }
 
 #ifdef INVCON_TEST
@@ -228,6 +296,12 @@ static void InverterControl_Startup_inv(InverterControl_Inverter_t* inv)
 
 
 /***Private Inline Function Implementations***********************************/
+static inline __attribute__((always_inline)) void InverterControl_Update_con(InverterControl_Inverter_t* inv,
+		InverterControl_Inverter_io_control_t be1, InverterControl_Inverter_io_control_t be2)
+{
+	inv->be1.control = be1;
+	inv->be2.control = be2;
+}
 
 static inline __attribute__((always_inline)) void InverterControl_Update_io(InverterControl_Inverter_t* inv)
 {
