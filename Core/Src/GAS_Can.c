@@ -29,7 +29,7 @@ static void GAS_Can_rxSetting(void)
 
         InverterControl_msg_rx_1.can = &hcan1;
 		InverterControl_msg_rx_2.can = &hcan1;
-		
+
 		sFilterConfig.FilterFIFOAssignment = CAN_RX_FIFO0;
         InverterControl_msg_rx_1.fifoAssignment = sFilterConfig.FilterFIFOAssignment;
 		InverterControl_msg_rx_2.fifoAssignment = sFilterConfig.FilterFIFOAssignment;
@@ -56,6 +56,7 @@ static void GAS_Can_rxSetting(void)
         }
     }
 }
+
 
 void GAS_Can_init(void)
 {
