@@ -80,6 +80,10 @@ typedef struct
 
 InverterControl_t InverterControl;
 
+
+volatile uint32_t testCountCanRxFifo = 0;
+volatile uint32_t testCountCanRx2 = 0;
+
 /***Private Function Prototypes***********************************************/
 
 static void InverterControl_Startup_inv(InverterControl_Inverter_t *inv);
@@ -154,6 +158,7 @@ void InverterControl_Run_1ms(void)
     /*InverterControl message CAN1_RX*/
     while (HAL_CAN_GetRxFifoFillLevel(&hcan1, CAN_RX_FIFO0) != 0)
     {
+    	testCountCanRxFifo ++;	//Test
         HAL_CAN_GetRxMessage(&hcan1, CAN_RX_FIFO0, &canRxHeader, rxDataBuf);
         if (canRxHeader.FilterMatchIndex == InverterControl_msg_rx_1.fim)
         {
@@ -177,6 +182,7 @@ void InverterControl_Run_1ms(void)
         }
         else if (canRxHeader.FilterMatchIndex == InverterControl_msg_rx_2.fim)
         {
+        	testCountCanRx2++;
             uint8_t dlc = canRxHeader.DLC;
             if (dlc > 0)
             {
