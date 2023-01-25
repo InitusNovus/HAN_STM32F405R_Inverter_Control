@@ -167,8 +167,11 @@ void InverterControl_Run_1ms(void)
             {
                 if (dlc > 8)
                     dlc = 8;
-                while (--dlc)
-                    InverterControl_msg_rx_1.msg.U[dlc] = rxDataBuf[dlc];
+                while (dlc)
+                {
+                	InverterControl_msg_rx_1.msg.U[dlc-1] = rxDataBuf[dlc-1];
+                	dlc--;
+                }
             }
             if (InverterControl_msg_rx_1.updated == CanMsg_updated ||
                 InverterControl_msg_rx_1.updated == CanMsg_overridden)
@@ -188,8 +191,11 @@ void InverterControl_Run_1ms(void)
             {
                 if (dlc > 8)
                     dlc = 8;
-                while (--dlc)
-                    InverterControl_msg_rx_2.msg.U[dlc] = rxDataBuf[dlc];
+                while (dlc)
+                {
+                	InverterControl_msg_rx_2.msg.U[dlc-1] = rxDataBuf[dlc-1];
+                	dlc--;
+                }
             }
             if (InverterControl_msg_rx_2.updated == CanMsg_updated ||
                 InverterControl_msg_rx_2.updated == CanMsg_overridden)
